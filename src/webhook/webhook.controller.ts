@@ -1,6 +1,15 @@
-import { Body, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { WebhookService } from './webhook.service';
 import { ResponseMessageDto } from './dtos/webhook.dtos';
+import { ApiKeyGuard } from 'src/api-key/api-key.guard';
 
 @Controller('webhook')
 export class WebhookController {
@@ -35,6 +44,7 @@ export class WebhookController {
   }
 
   @Post('/api/send')
+  @UseGuards(ApiKeyGuard)
   async responseMessage(@Body() body: ResponseMessageDto) {
     return await this.webhookService.reponseMessage(body);
   }
